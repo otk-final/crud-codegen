@@ -1,0 +1,44 @@
+{{range $val :=.Output.Header}}
+{{- $val}}
+{{end}}
+
+import com.fasterxml.jackson.databind.JsonNode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+/**
+ * {{.Comment}} 实体
+ */
+@TableName("{{.Table.Name}}")
+@Schema(description = "{{.Comment}}")
+public class {{.Name}}Entity {{if .Inherit.Class}} extends {{.Inherit.Class}} {{end}} {
+
+    {{range $val :=.Columns}}
+    /**
+     * {{$val.Comment}}
+     * {{if $val.Enums}}{{$val.Enums}}{{end}}
+     */
+    {{if $val.PK}}@TableId{{end -}}
+    @TableField(value = "{{$val.Name}}")
+    @Schema(description = "{{$val.Comment}}")
+    private {{$val.TypeAlias}} {{$val.Alias}};
+    {{end}}
+
+
+    {{range $val :=.Columns}}
+    public {{$val.TypeAlias}} get{{Capitalize $val.Alias}}() {
+        return {{$val.Alias}};
+    }
+
+    public void set{{Capitalize $val.Alias}}({{$val.TypeAlias}} {{$val.Alias}}) {
+        this.{{$val.Alias}} = {{$val.Alias}};
+    }
+    {{end}}
+
+}

@@ -1,0 +1,14 @@
+{{range $val :=.Output.Header}}
+{{- $val}}
+{{end}}
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListPagingAndSortingRepository;
+
+/**
+ * {{.Comment}} 持久层
+ */
+public interface {{.Name}}Repository extends CrudRepository<{{.Name}}Entity,Long>,ListPagingAndSortingRepository<{{.Name}}Entity, Long> {
+
+
+}

@@ -1,0 +1,91 @@
+{{range $val :=.Output.Header}}
+{{- $val }}
+{{end}}
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+/**
+ * {{.Comment}} 接口层
+ */
+@RestController
+@Tag(name = "{{.Name}}Api", description = "{{.Comment}}")
+public class {{.Name}}Controller {
+
+    private static final Logger logger = LoggerFactory.getLogger({{.Name}}Controller.class);
+
+
+    @Autowired
+    private {{.Name}}Repository repository;
+
+    /**
+     * 新增
+     */
+    @Operation(summary = "新增-{{.Comment}}")
+    @PostMapping("{{.Api.Path}}/{{.Endpoint}}/add")
+    public {{.Api.Class}}<{{.Name}}Entity> add(@RequestBody {{.Name}}Entity body) {
+        //TODO id generation strategy
+        //body.setId();
+        return new {{.Api.Class}}<>(repository.save(body));
+    }
+
+    /**
+     * 查询
+     */
+    @Operation(summary = "查询-{{.Comment}}")
+    @GetMapping("{{.Api.Path}}/{{.Endpoint}}/detail/{id}")
+    public {{.Api.Class}}<{{.Name}}Entity> get(@PathVariable("id") Long id) {
+        return new {{.Api.Class}}<>(repository.findById(id).orElseThrow());
+    }
+
+    /**
+     * 修改
+     */
+    @Operation(summary = "修改-{{.Comment}}")
+    @PutMapping("{{.Api.Path}}/{{.Endpoint}}/update/{id}")
+    public {{.Api.Class}}<{{.Name}}Entity> update(@PathVariable("id") Long id, @RequestBody {{.Name}}Entity body) {
+        body.setNew(false);
+        body.setId(id);
+        return new {{.Api.Class}}<>(repository.save(body));
+    }
+    /**
+     * 删除
+     */
+    @Operation(summary = "删除-{{.Comment}}")
+    @DeleteMapping("{{.Api.Path}}/{{.Endpoint}}/delete/{id}")
+    public {{.Api.Class}}<Boolean> delete(@PathVariable("id") Long id) {
+        repository.deleteById(id);
+        return new {{.Api.Class}}<>(true);
+    }
+
+    /**
+     * 分页
+     */
+    @Operation(summary = "分页查询-{{.Comment}}")
+    @GetMapping("{{.Api.Path}}/{{.Endpoint}}/page")
+    public {{.Api.Class}}<Page<{{.Name}}Entity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<{{.Name}}Entity> result = repository.findAll(pageable);
+        return new {{.Api.Class}}<>(result);
+    }
+
+    /**
+     * 全量
+     */
+    @Operation(summary = "全量查询-{{.Comment}}")
+    @GetMapping("{{.Api.Path}}/{{.Endpoint}}/list")
+    public {{.Api.Class}}<List<{{.Name}}Entity>> list() {
+        return new {{.Api.Class}}<>(repository.findAll(Sort.unsorted()));
+    }
+}
+
+
