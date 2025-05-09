@@ -35,9 +35,9 @@ go build -o crud
 
 ## Download - 1.0.0
 
-- [mac](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_darwin.zip)
-- [windows](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_windows.zip)
-- [linux](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_linux.zip)
+- [mac](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud-darwin.zip)
+- [windows](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud-windows.zip)
+- [linux](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud-linux.zip)
 
 安装并添加到环境变量
 
