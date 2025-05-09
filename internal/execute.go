@@ -22,7 +22,7 @@ type Env struct {
 }
 
 type TableEndpoint struct {
-	Group       string                   `json:"group,omitempty"`
+	Module      string                   `json:"module,omitempty"`
 	Name        string                   `json:"name,omitempty"`
 	Endpoint    string                   `json:"endpoint,omitempty"`
 	Comment     string                   `json:"comment,omitempty"`
@@ -42,7 +42,7 @@ type Config struct {
 
 type Mode struct {
 	*schema.Table
-	Group    string
+	Module   string
 	Name     string
 	Endpoint string
 	Comment  string
@@ -129,7 +129,7 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 
 	mode := &Mode{
 		Table:    table,
-		Group:    endpoint.Group,
+		Module:   endpoint.Module,
 		Endpoint: lo.Ternary(endpoint.Endpoint != "", endpoint.Endpoint, table.Name),
 		Name:     lo.Ternary(endpoint.Name != "", endpoint.Name, tableName),
 		Comment:  lo.Ternary(endpoint.Comment != "", endpoint.Comment, table.Comment),
@@ -180,7 +180,7 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 }
 
 func (receiver *Mode) Format(text string) string {
-	text = strings.ReplaceAll(text, "{group}", receiver.Group)
+	text = strings.ReplaceAll(text, "{module}", receiver.Module)
 	text = strings.ReplaceAll(text, "{name}", receiver.Name)
 	return text
 }

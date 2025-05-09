@@ -14,56 +14,27 @@ var api = schema.Output{
 		"package com.demo.{group}.controller;",
 		"",
 		"import com.demo.ApiResult;",
-		"import com.demo.{group}.entity.{name}Entity;",
-		"import com.demo.{group}.repository.{name}Repository;",
+		"import com.demo.{module}.entity.{name}Entity;",
+		"import com.demo.{module}.repository.{name}Repository;",
 	},
-	File: "src/main/java/com/demo/{group}/controller/{name}Controller.java",
+	File: "src/main/java/com/demo/{module}/controller/{name}Controller.java",
 }
 
 var entity = schema.Output{
 	Header: []string{
-		"package com.demo.{group}.entity;",
+		"package com.demo.{module}.entity;",
 		"",
 		"import com.demo.BaseEntity;",
 	},
-	File: "src/main/java/com/demo/{group}/entity/{name}Entity.java",
+	File: "src/main/java/com/demo/{module}/entity/{name}Entity.java",
 }
 var persist = schema.Output{
 	Header: []string{
-		"package com.demo.{group}.repository;",
+		"package com.demo.{module}.repository;",
 		"",
-		"import com.demo.{group}.entity.{name}Entity;",
+		"import com.demo.{module}.entity.{name}Entity;",
 	},
-	File: "src/main/java/com/demo/{group}/repository/{name}Repository.java",
-}
-
-var mybatisOutputs = map[string]schema.Output{
-	"mybatis-api": {
-		Header: []string{
-			"package com.demo.{group}.controller;",
-			"",
-			"import com.demo.ApiResult;",
-			"import com.demo.{group}.entity.{name}Entity;",
-			"import com.demo.{group}.repository.{name}Repository;",
-		},
-		File: "src/main/java/com/demo/{group}/controller/{name}Controller.java",
-	},
-	"mybatis-entity": {
-		Header: []string{
-			"package com.demo.{group}.entity;",
-			"",
-			"import com.demo.BaseEntity;",
-		},
-		File: "src/main/java/com/demo/{group}/entity/{name}Entity.java",
-	},
-	"mybatis-persist": {
-		Header: []string{
-			"package com.demo.{group}.repository;",
-			"",
-			"import com.demo.{group}.entity.{name}Entity;",
-		},
-		File: "src/main/java/com/demo/{group}/repository/{name}Repository.java",
-	},
+	File: "src/main/java/com/demo/{module}/repository/{name}Repository.java",
 }
 
 var defaultConfig = internal.Config{
@@ -114,7 +85,7 @@ var defaultEnv = &internal.Env{
 	Config:     defaultConfig,
 	Tables: []*internal.TableEndpoint{
 		{
-			Group:     "test",
+			Module:    "test",
 			TableName: "example",
 			Comment:   "测试",
 		},

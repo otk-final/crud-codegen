@@ -29,7 +29,7 @@ public class {{.Name}}Controller {
     /**
      * 新增
      */
-    @Operation(summary = "新增-{{.Comment}}")
+    @Operation(summary = "新增-{{.Comment}}",operationId = "add")
     @PostMapping("{{.Api.Path}}/{{.Endpoint}}/add")
     public {{.Api.Class}}<Boolean> add(@RequestBody {{.Name}}Entity body) {
         return new {{.Api.Class}}<>(repository.save(body));
@@ -38,7 +38,7 @@ public class {{.Name}}Controller {
     /**
      * 查询
      */
-    @Operation(summary = "查询-{{.Comment}}")
+    @Operation(summary = "查询-{{.Comment}}",operationId = "get")
     @GetMapping("{{.Api.Path}}/{{.Endpoint}}/detail/{id}")
     public {{.Api.Class}}<{{.Name}}Entity> get(@PathVariable("id") Long id) {
         return new {{.Api.Class}}<>(repository.getById(id));
@@ -47,7 +47,7 @@ public class {{.Name}}Controller {
     /**
      * 修改
      */
-    @Operation(summary = "修改-{{.Comment}}")
+    @Operation(summary = "修改-{{.Comment}}",operationId = "update")
     @PutMapping("{{.Api.Path}}/{{.Endpoint}}/update/{id}")
     public {{.Api.Class}}<Boolean> update(@PathVariable("id") Long id, @RequestBody {{.Name}}Entity body) {
         body.setId(id);
@@ -57,7 +57,7 @@ public class {{.Name}}Controller {
     /**
      * 删除
      */
-    @Operation(summary = "删除-{{.Comment}}")
+    @Operation(summary = "删除-{{.Comment}}",operationId = "delete")
     @DeleteMapping("{{.Api.Path}}/{{.Endpoint}}/delete/{id}")
     public {{.Api.Class}}<Boolean> delete(@PathVariable("id") Long id) {
         return new {{.Api.Class}}<>(repository.removeById(id));
@@ -66,7 +66,7 @@ public class {{.Name}}Controller {
     /**
      * 分页
      */
-    @Operation(summary = "分页查询-{{.Comment}}")
+    @Operation(summary = "分页查询-{{.Comment}}",operationId = "page")
     @GetMapping("{{.Api.Path}}/{{.Endpoint}}/page")
     public {{.Api.Class}}<IPage<{{.Name}}Entity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
         IPage<{{.Name}}Entity> pageable = new Page<>(page-1, size);
@@ -76,7 +76,7 @@ public class {{.Name}}Controller {
     /**
      * 全量
      */
-    @Operation(summary = "全量查询-{{.Comment}}")
+    @Operation(summary = "全量查询-{{.Comment}}",operationId = "list")
     @GetMapping("{{.Api.Path}}/{{.Endpoint}}/list")
     public {{.Api.Class}}<List<{{.Name}}Entity>> list() {
         return new {{.Api.Class}}<>(repository.list());

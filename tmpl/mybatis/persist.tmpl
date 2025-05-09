@@ -3,10 +3,12 @@
 {{end}}
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Component;
 
 /**
  * {{.Comment}} 持久层
  */
+@Component
 public interface {{.Name}}Repository extends IService<{{.Name}}Entity>{
 
 }
