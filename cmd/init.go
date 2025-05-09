@@ -11,7 +11,7 @@ import (
 
 var api = schema.Output{
 	Header: []string{
-		"package com.demo.{group}.controller;",
+		"package com.demo.{module}.controller;",
 		"",
 		"import com.demo.ApiResult;",
 		"import com.demo.{module}.entity.{name}Entity;",

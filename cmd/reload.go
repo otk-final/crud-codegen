@@ -11,8 +11,8 @@ import (
 	"os"
 )
 
-var genCmd = &cobra.Command{
-	Use:   "gen",
+var reloadCmd = &cobra.Command{
+	Use:   "reload",
 	Short: "Generate code based on the configuration file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
@@ -73,7 +73,7 @@ var defaultEnvFileName = "crud.json"
 func init() {
 
 	//reload
-	genCmd.Flags().StringVarP(&envFile, "env", "e", "", "customize env file")
-	genCmd.Flags().StringVarP(&filter, "filter", "f", "", "filter table_name or endpoint")
-	genCmd.Flags().StringSliceVarP(&outputs, "output", "o", []string{}, "filter outputs")
+	reloadCmd.Flags().StringVarP(&envFile, "env", "e", "", "customize env file")
+	reloadCmd.Flags().StringVarP(&filter, "filter", "f", "", "filter table_name or endpoint")
+	reloadCmd.Flags().StringSliceVarP(&outputs, "output", "o", []string{}, "filter outputs")
 }
