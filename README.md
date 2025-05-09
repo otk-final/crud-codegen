@@ -82,7 +82,7 @@ Output：/Users/project/src/main/java/com/demo/demo/repository/UserPrincipalRepo
 ### init
 
 ```shell
-openapi init
+crud init
 ```
 
 在当前目录下生成`crud.json`配置文件
