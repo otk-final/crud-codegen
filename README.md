@@ -6,98 +6,16 @@ This is a tool that quickly generates CRUD interfaces based on database table st
 
 **此项目不仅限于`java web` 开发，可根据数据库字段信息，自定义任意模版**
 
-```java
-package com.demo.user.controller;
-
-import com.demo.ApiResult;
-import com.demo.user.entity.UserPrincipalEntity;
-import com.demo.user.repository.UserPrincipalRepository;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-/**
- * 用户注册表 接口层
- */
-@RestController
-@Tag(name = "UserPrincipalApi", description = "用户注册表")
-public class UserPrincipalController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserPrincipalController.class);
-
-
-    @Autowired
-    private UserPrincipalRepository repository;
-
-    /**
-     * 新增
-     */
-    @Operation(summary = "新增-用户注册表",operationId = "add")
-    @PostMapping("/v1/user/user_principal/add")
-    public ApiResult<Boolean> add(@RequestBody UserPrincipalEntity body) {
-        return new ApiResult<>(repository.save(body));
-    }
-
-    /**
-     * 查询
-     */
-    @Operation(summary = "查询-用户注册表",operationId = "get")
-    @GetMapping("/v1/user/user_principal/detail/{id}")
-    public ApiResult<UserPrincipalEntity> get(@PathVariable("id") Long id) {
-        return new ApiResult<>(repository.getById(id));
-    }
-
-    /**
-     * 修改
-     */
-    @Operation(summary = "修改-用户注册表",operationId = "update")
-    @PutMapping("/v1/user/user_principal/update/{id}")
-    public ApiResult<Boolean> update(@PathVariable("id") Long id, @RequestBody UserPrincipalEntity body) {
-        body.setId(id);
-        return new ApiResult<>(repository.updateById(body));
-    }
-
-    /**
-     * 删除
-     */
-    @Operation(summary = "删除-用户注册表",operationId = "delete")
-    @DeleteMapping("/v1/user/user_principal/delete/{id}")
-    public ApiResult<Boolean> delete(@PathVariable("id") Long id) {
-        return new ApiResult<>(repository.removeById(id));
-    }
-
-    /**
-     * 分页
-     */
-    @Operation(summary = "分页查询-用户注册表",operationId = "page")
-    @GetMapping("/v1/user/user_principal/page")
-    public ApiResult<IPage<UserPrincipalEntity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
-        IPage<UserPrincipalEntity> pageable = new Page<>(page-1, size);
-        return new ApiResult<>(repository.page(pageable));
-    }
-
-    /**
-     * 全量
-     */
-    @Operation(summary = "全量查询-用户注册表",operationId = "list")
-    @GetMapping("/v1/user/user_principal/list")
-    public ApiResult<List<UserPrincipalEntity>> list() {
-        return new ApiResult<>(repository.list());
-    }
-}
-
-
-
-```
+| 方法   | 路径                                              |
+| ------ | ------------------------------------------------- |
+| `新增` | @PostMapping("/v1/module/resource/add")           |
+| `删除` | @DeleteMapping("/v1/module/resource/delete/{id}") |
+| `修改` | @PutMapping("/v1/module/resource/update/{id}")    |
+| `分页` | @GetMapping("/v1/module/resource/page")           |
+| `全量` | @GetMapping("/v1/module/resource/list")           |
+| `查询` | @GetMapping("/v1/module/resource/detail/{id}")    |
 
 
 
