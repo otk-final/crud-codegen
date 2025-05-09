@@ -208,7 +208,7 @@ crud reload -f updated_table -o mybatis-entity
          "name": "Example"
          //忽略数据表名前缀
          "table_prefix": "pd_"
-         //数据表名        
+         //数据表名
          "table_name": "pd_example"
          //扩展输出模版 参考config.outputs配置，相同模版标识则覆盖config默认配置
          "outputs":{
@@ -232,7 +232,7 @@ crud reload -f updated_table -o mybatis-entity
 
 #### RestController 接口层
 
-```
+```java
 package com.demo.user.controller;
 
 import com.demo.ApiResult;
