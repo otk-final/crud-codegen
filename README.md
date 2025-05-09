@@ -153,7 +153,7 @@ Flags:
 crud start -s "username:password@tcp(127.0.0.1:3306)/information_schema" -d databasename -t tablename
 ```
 
-```verilog
+```shell
 Output：/Users/project/src/main/java/com/demo/demo/controller/UserPrincipalController.java 
 Output：/Users/project/src/main/java/com/demo/demo/entity/UserPrincipalEntity.java 
 Output：/Users/project/src/main/java/com/demo/demo/repository/UserPrincipalRepository.java 
@@ -222,7 +222,7 @@ crud reload -f updated_table -o mybatis-entity
       "outputs": {
          //模版标识
          "mybatis-api": {
-           	//模版文件中默认头信息
+            //模版文件中默认头信息
             "header": [
                "package com.demo.{module}.controller;",
                "",
@@ -261,7 +261,7 @@ crud reload -f updated_table -o mybatis-entity
       "api": {
          //全局统一响应数据结构（需支持泛型）
          "class": "ApiResult",
-				 //统一Path前缀
+         //统一Path前缀
          "path": "/v1/{module}"
       },
       //生成实体Entity对象时使用
@@ -289,15 +289,15 @@ crud reload -f updated_table -o mybatis-entity
          //默认数据库表名首字母大写
          "name": "Example"
          //忽略数据表名前缀
-         "table_prefix":"pd_"
+         "table_prefix": "pd_"
          //数据表名        
          "table_name": "pd_example"
          //扩展输出模版 参考config.outputs配置，相同模版标识则覆盖config默认配置
          "outputs":{
-        		"mybatis-persist":{...}
+             "mybatis-persist": {...}
       	 },
          //自定义 端点名称 默认原始表名
-     		 "endpoint":"test_example"
+         "endpoint": "test_example"
       }
    ]
 }
