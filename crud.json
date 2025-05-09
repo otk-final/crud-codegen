@@ -1,0 +1,69 @@
+{
+   "driver": "mysql",
+   "url": "username:password@tcp(localhost:3306)/information_schema",
+   "datasource": "demo",
+   "config": {
+      "camel_case": true,
+      "types": {
+         "bigint": "Long",
+         "date": "LocalDate",
+         "datetime": "LocalDateTime",
+         "decimal": "BigDecimal",
+         "int": "Integer",
+         "json": "JsonNode",
+         "text": "String",
+         "tinyint": "Integer",
+         "varchar": "String"
+      },
+      "outputs": {
+         "mybatis-api": {
+            "header": [
+               "package com.demo.{module}.controller;",
+               "",
+               "import com.demo.ApiResult;",
+               "import com.demo.{module}.entity.{name}Entity;",
+               "import com.demo.{module}.repository.{name}Repository;"
+            ],
+            "file": "src/main/java/com/demo/{module}/controller/{name}Controller.java"
+         },
+         "mybatis-entity": {
+            "header": [
+               "package com.demo.{module}.entity;",
+               "",
+               "import com.demo.BaseEntity;"
+            ],
+            "file": "src/main/java/com/demo/{module}/entity/{name}Entity.java"
+         },
+         "mybatis-persist": {
+            "header": [
+               "package com.demo.{module}.repository;",
+               "",
+               "import com.demo.{module}.entity.{name}Entity;"
+            ],
+            "file": "src/main/java/com/demo/{module}/repository/{name}Repository.java"
+         }
+      },
+      "api": {
+         "class": "ApiResult",
+         "path": "/v1"
+      },
+      "inherit": {
+         "class": "BaseEntity",
+         "columns": [
+            "id",
+            "created_at",
+            "created_by",
+            "updated_at",
+            "updated_by",
+            "del_flag"
+         ]
+      }
+   },
+   "tables": [
+      {
+         "module": "test",
+         "comment": "测试",
+         "table_name": "example"
+      }
+   ]
+}

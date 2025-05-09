@@ -1,26 +1,110 @@
-# OpenApi （Swagger）接口代码生成器 
+# CRUD 代码生成器 
 
-This is a tool that generates API call code in various programming languages based on the content of an OpenAPI document.
+This is a tool that quickly generates CRUD interfaces based on database table structures.
 
-根据openapi (swagger) 文档生成不同编程语言客户端接口代码
+根据数据库表结构 生成Rest风格CRUD代码
 
-| Ts     | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_ts.jpg) |
-| ------ | ------------------------------------------------------------ |
-| Java   | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_java.jpg) |
-| Go     | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_go.jpg) |
-| Swift  | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_swift.jpg) |
-| Python | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_python.jpg) |
-| Kotlin | ![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/api_kotlin.jpg) |
+**此项目不仅限于`java web` 开发，可根据数据库字段信息，自定义任意模版**
 
-![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/home_api.png)
+```java
+package com.demo.user.controller;
 
-![image](https://github.com/otk-final/openapi-codegen/blob/master/_images/home_struct.png)
+import com.demo.ApiResult;
+import com.demo.user.entity.UserPrincipalEntity;
+import com.demo.user.repository.UserPrincipalRepository;
+
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+/**
+ * 用户注册表 接口层
+ */
+@RestController
+@Tag(name = "UserPrincipalApi", description = "用户注册表")
+public class UserPrincipalController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserPrincipalController.class);
+
+
+    @Autowired
+    private UserPrincipalRepository repository;
+
+    /**
+     * 新增
+     */
+    @Operation(summary = "新增-用户注册表",operationId = "add")
+    @PostMapping("/v1/user/user_principal/add")
+    public ApiResult<Boolean> add(@RequestBody UserPrincipalEntity body) {
+        return new ApiResult<>(repository.save(body));
+    }
+
+    /**
+     * 查询
+     */
+    @Operation(summary = "查询-用户注册表",operationId = "get")
+    @GetMapping("/v1/user/user_principal/detail/{id}")
+    public ApiResult<UserPrincipalEntity> get(@PathVariable("id") Long id) {
+        return new ApiResult<>(repository.getById(id));
+    }
+
+    /**
+     * 修改
+     */
+    @Operation(summary = "修改-用户注册表",operationId = "update")
+    @PutMapping("/v1/user/user_principal/update/{id}")
+    public ApiResult<Boolean> update(@PathVariable("id") Long id, @RequestBody UserPrincipalEntity body) {
+        body.setId(id);
+        return new ApiResult<>(repository.updateById(body));
+    }
+
+    /**
+     * 删除
+     */
+    @Operation(summary = "删除-用户注册表",operationId = "delete")
+    @DeleteMapping("/v1/user/user_principal/delete/{id}")
+    public ApiResult<Boolean> delete(@PathVariable("id") Long id) {
+        return new ApiResult<>(repository.removeById(id));
+    }
+
+    /**
+     * 分页
+     */
+    @Operation(summary = "分页查询-用户注册表",operationId = "page")
+    @GetMapping("/v1/user/user_principal/page")
+    public ApiResult<IPage<UserPrincipalEntity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
+        IPage<UserPrincipalEntity> pageable = new Page<>(page-1, size);
+        return new ApiResult<>(repository.page(pageable));
+    }
+
+    /**
+     * 全量
+     */
+    @Operation(summary = "全量查询-用户注册表",operationId = "list")
+    @GetMapping("/v1/user/user_principal/list")
+    public ApiResult<List<UserPrincipalEntity>> list() {
+        return new ApiResult<>(repository.list());
+    }
+}
+
+
+
+```
+
+
 
 ## Feature
 
-- 支持`v2`/`v3`文档格式
-- 支持语言：`ts`，`swift`，`kotlin`，`java`，`python`，`go`
-- ***支持泛型***
+- 目前仅支持`mysql`文档格式
+- 内置模版：`spring-data-jdbc`，`mybatis-plus`
 - 支持自定义模版
 
 ## Install 
@@ -28,14 +112,14 @@ This is a tool that generates API call code in various programming languages bas
 源码编译
 
 ```
-go build -o openapi
+go build -o crud
 ```
 
 ## Download - 1.0.0
 
-- [mac](https://github.com/otk-final/openapi-codegen/releases/download/v1.0.0/openapi_darwin.zip)
-- [windows](https://github.com/otk-final/openapi-codegen/releases/download/v1.0.0/openapi_windows.zip)
-- [linux](https://github.com/otk-final/openapi-codegen/releases/download/v1.0.0/openapi_linux.zip)
+- [mac](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_darwin.zip)
+- [windows](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_windows.zip)
+- [linux](https://github.com/otk-final/crud-codegen/releases/download/v1.0.0/crud_linux.zip)
 
 安装并添加到环境变量
 
@@ -44,32 +128,35 @@ go build -o openapi
 ### start
 
 ```shell
-openapi start -h
+crud start -h
 
-Quick start
+Quickly start
 
 Usage:
-   start [flags]
+  crud start [flags]
+
+Examples:
+crud start -s username:password@tcp(localhost:3306)/information_schema -d demo -t table_name
 
 Flags:
-  -c, --client_output string   client output file
-  -e, --endpoint string        example：https://{server}:{port}/v3/api-docs
-  -h, --help                   help for start
-  -l, --lang string            kotlin,python,ts,typescript,swift,java,go,golang
-  -o, --output string          api output file
-  -s, --style string           customize template file
-  -v, --version string         openapi version (default "v3")
+  -d, --datasource string          table datasource name
+  -h, --help                       help for start
+  -s, --scheme datasource string   scheme datasource address
+  -t, --tables strings             table name
 
 ```
 
-例子
+ `快捷生成`
 
 ```shell
-openapi -l ts -o src/api.ts -c src/client.ts  -v v3 -e http://localhost:8080/v3/api_docs
+# 在工程根目录下 执行
+crud start -s "username:password@tcp(127.0.0.1:3306)/information_schema" -d databasename -t tablename
 ```
 
-```
-openapi -l kotlin -o src/api.kt -c src/client.kt  -v v2 -e http://localhost:8080/v2/api_docs
+```verilog
+Output：/Users/project/src/main/java/com/demo/demo/controller/UserPrincipalController.java 
+Output：/Users/project/src/main/java/com/demo/demo/entity/UserPrincipalEntity.java 
+Output：/Users/project/src/main/java/com/demo/demo/repository/UserPrincipalRepository.java 
 ```
 
 
@@ -80,128 +167,459 @@ openapi -l kotlin -o src/api.kt -c src/client.kt  -v v2 -e http://localhost:8080
 openapi init
 ```
 
-在当前目录下生成`openapi.json`配置文件
+在当前目录下生成`crud.json`配置文件
 
 ### reload
 
 ```shell
-#默认当前目录下 openapi.json
-openapi reload
+Generate code based on the configuration file
 
-#自定义文件路径
-openapi reload -f /app/openapi.json
+Usage:
+  crud reload [flags]
+
+Flags:
+  -e, --env string       customize env file
+  -f, --filter string    filter table_name or endpoint
+  -h, --help             help for reload
+  -o, --output strings   filter outputs
 ```
 
-根据`openapi.json`配置文件重新生成接口代码，默认全部
+- 根据`crud.json`配置文件重新生成代码，默认全部
+
+- 当数据表新增或删除字段时，只需要更新指定 `数据表` 的 指定 `模版文件` 即可，避免代码被覆盖
 
 ```shell
-#指定env
-openapi reload -f /app/openapi.json -n server_name
+crud reload -f updated_table -o mybatis-entity
 ```
-
-
 
 ### Configuration File
 
 ```json
-[{
-    "name:"server_name",
-    //openapi 文档地址
-    "endpoint": "http://localhost:8083/v3/api-docs",
-    //api文件路径
-    "output": "src/api.ts",
-    //client文件路径
-    "client_output": "src/client.ts",
-    //目标语言
-    "lang": "ts",
-    //自定义模版路径
-    "style": "custom.tmpl",
-    //openapi 版本
-    "version": "v3",
-    //忽略路径
-    "ignore": ["/error","/v3/"],
-    //匹配路径
-    "filter": ["/user/"],
-    //别名 - 当目标语言遇到语法关键词冲突时使用
-    "alias": {
-      //属性别名
-      "properties": {
-        "JsonNode":"any"
-      },
-      //结构体别名
-      "modes": {
-        "User":"People"
-      },
-      //类型别名
+{
+   //数据库驱动
+   "driver": "mysql",
+   //表结构查询地址
+   "url": "username:password@tcp(localhost:3306)/information_schema",
+   //目标数据库
+   "datasource": "demo",
+   //全局配置
+   "config": {
+      //是否开启字段驼峰转换
+      "camel_case": true,
+      //数据库和当前模版代码类型映射（参考java）
       "types": {
-        //自定义数据类型
-        "string": "CustomString",
-        //format 自定义数据类型
-       	"interge+int64": "CustomLong" 
+         "bigint": "Long",
+         "date": "LocalDate",
+         "datetime": "LocalDateTime",
+         "decimal": "BigDecimal",
+         "int": "Integer",
+         "json": "JsonNode",
+         "text": "String",
+         "tinyint": "Integer",
+         "varchar": "String"
       },
-      //参数别名
-      "parameters": {
-        "export": "output"
+      //输出模版
+      "outputs": {
+         //模版标识
+         "mybatis-api": {
+           	//模版文件中默认头信息
+            "header": [
+               "package com.demo.{module}.controller;",
+               "",
+               "import com.demo.ApiResult;",
+               "import com.demo.{module}.entity.{name}Entity;",
+               "import com.demo.{module}.repository.{name}Repository;"
+            ],
+            //模版解析自定义参数
+            "variables":{
+               "key1":"value1"
+            }
+            //自定义模版文件
+            "template":"custom.tmpl"
+            //模版文件输出地址
+            "file": "src/main/java/com/demo/{module}/controller/{name}Controller.java"
+         },
+         "mybatis-entity": {
+            "header": [
+               "package com.demo.{module}.entity;",
+               "",
+               "import com.demo.BaseEntity;"
+            ],
+            //none 默认跳过不生成
+            "file": "none"
+         },
+         "mybatis-persist": {
+            "header": [
+               "package com.demo.{module}.repository;",
+               "",
+               "import com.demo.{module}.entity.{name}Entity;"
+            ],
+            "file": "src/main/java/com/demo/{module}/repository/{name}Repository.java"
+         }
+      },
+      //生成RestController接口代码时使用
+      "api": {
+         //全局统一响应数据结构（需支持泛型）
+         "class": "ApiResult",
+				 //统一Path前缀
+         "path": "/v1/{module}"
+      },
+      //生成实体Entity对象时使用
+      "inherit": {
+         //实体继承父类
+         "class": "BaseEntity",
+         //实体继承父类中共用字段
+         "columns": [
+            "id",
+            "created_at",
+            "created_by",
+            "updated_at",
+            "updated_by",
+            "del_flag"
+         ]
       }
-    },
-    //模版文件变量
-    "variables": {
-      "apiPackage": "com.demo.api",
-      "structPackage": "com.demo.dto",
-      "clientPackage": "com.demo"
-    },
-    //泛型
-    "generics": {
-      //是否开启
-      "enable": true,
-      //是否展开Root包装类型
-      "unfold": false,
-      //泛型表达式
-      "expressions": {
-        //单一类型 - ApiResult<T>{... T data ...}
-        "ApiResult": [
-          "data"
-        ],
-        //集合类型 - PageData<T>{... List<T> entities ...}
-        "PageData": [
-          "entities+"
-        ],
-        //Map类型 - Map<String,T>{... T data ...}
-        "MapResult": [
-          "data~"
-        ],
-        //复合泛型 - KVPair<T,V> {... T key,V value ...}
-        "KVPair": [
-          "key",
-          "value"
-        ]
+   },
+   //目标表信息
+   "tables": [
+      {
+         //模块名
+         "module": "test",
+         //备注名
+         "comment": "测试",
+         //默认数据库表名首字母大写
+         "name": "Example"
+         //忽略数据表名前缀
+         "table_prefix":"pd_"
+         //数据表名        
+         "table_name": "pd_example"
+         //扩展输出模版 参考config.outputs配置，相同模版标识则覆盖config默认配置
+         "outputs":{
+        		"mybatis-persist":{...}
+      	 },
+         //自定义 端点名称 默认原始表名
+     		 "endpoint":"test_example"
       }
-    }
-  }]
+   ]
+}
 ```
 
-- openapi文档规范中不支持泛型，泛型表达式需在配置文件中预声明
-- 当server端采用统一标准泛型结构返回时，如：`ApiResult<T>`时，可开启`generics.unfold`  参数，业务方法可以直接获取`T`
-- 集合泛型声明：`属性+` ，采用 `+` 符号
-- Map泛型声明：`属性~` ，采用 `~`  符号
-- 内置模版文件：[模版文件](https://github.com/otk-final/openapi-codegen/tree/master/tmpl)
+- `api.class` 和 `inherit.class` 根据项目情况自定义
+- 内置`spring-data-jdbc`模版标识：`jdbc-entity`，`jdbc-api`，`jdbc-persist`
+- 内置`mybatis-plus`模版标识：`mybatis-entity`，`mybatis-api`，`mybatis-persist`
+- 默认集成 `swagger3.0` ，如若替换则参考配置文件自定义模版文件
+- 内置模版文件：[模版文件](https://github.com/otk-final/crud-codegen/tree/master/tmpl) 
+- 文档 `header` ，`file`，`path`  配置均支持占位符替换 `{module}`，`{name}`
 
 ### Example
 
-#### server端
+#### RestController 接口层
 
-> [openapi-server](https://github.com/otk-final/openapi-server)
+```
+package com.demo.user.controller;
 
-#### client端
+import com.demo.ApiResult;
+import com.demo.user.entity.UserPrincipalEntity;
+import com.demo.user.repository.UserPrincipalRepository;
 
-> [ts](https://github.com/otk-final/openapi-codegen/tree/master/_example/ts)
->
-> [go](https://github.com/otk-final/openapi-codegen/tree/master/_example/golang)
->
-> [java](https://github.com/otk-final/openapi-codegen/tree/master/_example/java)
->
-> [kotlin](https://github.com/otk-final/openapi-codegen/tree/master/_example/kotlin)
->
-> [swift](https://github.com/otk-final/openapi-codegen/tree/master/_example/swift)
->
-> [python](https://github.com/otk-final/openapi-codegen/tree/master/_example/python)
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+/**
+ * 用户注册表 接口层
+ */
+@RestController
+@Tag(name = "UserPrincipalApi", description = "用户注册表")
+public class UserPrincipalController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserPrincipalController.class);
+
+
+    @Autowired
+    private UserPrincipalRepository repository;
+
+    /**
+     * 新增
+     */
+    @Operation(summary = "新增-用户注册表",operationId = "add")
+    @PostMapping("/v1/user/user_principal/add")
+    public ApiResult<Boolean> add(@RequestBody UserPrincipalEntity body) {
+        return new ApiResult<>(repository.save(body));
+    }
+
+    /**
+     * 查询
+     */
+    @Operation(summary = "查询-用户注册表",operationId = "get")
+    @GetMapping("/v1/user/user_principal/detail/{id}")
+    public ApiResult<UserPrincipalEntity> get(@PathVariable("id") Long id) {
+        return new ApiResult<>(repository.getById(id));
+    }
+
+    /**
+     * 修改
+     */
+    @Operation(summary = "修改-用户注册表",operationId = "update")
+    @PutMapping("/v1/user/user_principal/update/{id}")
+    public ApiResult<Boolean> update(@PathVariable("id") Long id, @RequestBody UserPrincipalEntity body) {
+        body.setId(id);
+        return new ApiResult<>(repository.updateById(body));
+    }
+
+    /**
+     * 删除
+     */
+    @Operation(summary = "删除-用户注册表",operationId = "delete")
+    @DeleteMapping("/v1/user/user_principal/delete/{id}")
+    public ApiResult<Boolean> delete(@PathVariable("id") Long id) {
+        return new ApiResult<>(repository.removeById(id));
+    }
+
+    /**
+     * 分页
+     */
+    @Operation(summary = "分页查询-用户注册表",operationId = "page")
+    @GetMapping("/v1/user/user_principal/page")
+    public ApiResult<IPage<UserPrincipalEntity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
+        IPage<UserPrincipalEntity> pageable = new Page<>(page-1, size);
+        return new ApiResult<>(repository.page(pageable));
+    }
+
+    /**
+     * 全量
+     */
+    @Operation(summary = "全量查询-用户注册表",operationId = "list")
+    @GetMapping("/v1/user/user_principal/list")
+    public ApiResult<List<UserPrincipalEntity>> list() {
+        return new ApiResult<>(repository.list());
+    }
+}
+
+
+
+```
+
+#### Entity 实体对象 
+
+```java
+package com.demo.user.entity;
+
+import com.demo.BaseEntity;
+
+
+import com.fasterxml.jackson.databind.JsonNode;
+import io.swagger.v3.oas.annotations.media.Schema;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+/**
+ * 用户注册表 实体
+ */
+@TableName("user_principal")
+@Schema(description = "用户注册表")
+public class UserPrincipalEntity  extends BaseEntity  {
+
+    /**
+     * 主体唯一手机号
+     * 
+     */
+    @TableField(value = "unique_phone")
+    @Schema(description = "主体唯一手机号")
+    private String uniquePhone;
+    
+    /**
+     * 名称
+     * 
+     */
+    @TableField(value = "name")
+    @Schema(description = "名称")
+    private String name;
+    
+    /**
+     * 昵称
+     * 
+     */
+    @TableField(value = "nick_name")
+    @Schema(description = "昵称")
+    private String nickName;
+    
+    /**
+     * 头像
+     * 
+     */
+    @TableField(value = "avatar")
+    @Schema(description = "头像")
+    private String avatar;
+    
+    /**
+     * 出生年月
+     * 
+     */
+    @TableField(value = "birthday")
+    @Schema(description = "出生年月")
+    private LocalDate birthday;
+    
+    /**
+     * 性别
+     * 
+     */
+    @TableField(value = "gender")
+    @Schema(description = "性别")
+    private Integer gender;
+    
+    /**
+     * 邮箱
+     * 
+     */
+    @TableField(value = "email")
+    @Schema(description = "邮箱")
+    private String email;
+    
+    /**
+     * 地址
+     * 
+     */
+    @TableField(value = "address")
+    @Schema(description = "地址")
+    private String address;
+    
+    /**
+     * 登录名
+     * 
+     */
+    @TableField(value = "login_id")
+    @Schema(description = "登录名")
+    private String loginId;
+    
+    /**
+     * 登录密码
+     * 
+     */
+    @TableField(value = "login_password")
+    @Schema(description = "登录密码")
+    private String loginPassword;
+    
+    /**
+     * 邀请码
+     * 
+     */
+    @TableField(value = "invite_code")
+    @Schema(description = "邀请码")
+    private String inviteCode;
+    
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+    
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+    
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+    
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
+    }
+    
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    } 
+
+}
+```
+
+#### Repository 持久层 
+
+```java
+package com.demo.user.repository;
+
+import com.demo.user.entity.UserPrincipalEntity;
+
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Component;
+
+/**
+ * 用户注册表 持久层
+ */
+@Component
+public interface UserPrincipalRepository extends IService<UserPrincipalEntity>{
+
+}
+```

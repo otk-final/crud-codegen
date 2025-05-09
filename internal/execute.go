@@ -137,6 +137,9 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 		Api:      setting.Api,
 	}
 
+	//替换占位符
+	mode.Api.Path = mode.Format(mode.Api.Path)
+
 	//生成文件
 	for name, output := range defaultOutput {
 
