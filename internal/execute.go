@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 	"maps"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 	"unicode"
 )
@@ -170,8 +170,11 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 
 		//创建目录
 		file = tmpl.PwdJoinPath(file)
-		dir := path.Dir(file)
-		_ = os.MkdirAll(dir, os.ModePerm)
+		dir := filepath.Dir(file)
+		err = os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return err
+		}
 
 		//写入文件
 		_ = os.WriteFile(file, buf.Bytes(), os.ModePerm)
