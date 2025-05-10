@@ -223,7 +223,7 @@ crud reload -f updated_table -o mybatis-entity
 
 - `api.class` 和 `inherit.class` 根据项目情况自定义
 - 内置`spring-data-jdbc`模版标识：`jdbc-entity`，`jdbc-api`，`jdbc-persist`
-- 内置`mybatis-plus`模版标识：`mybatis-entity`，`mybatis-api`，`mybatis-persist`
+- 内置`mybatis-plus`模版标识：`mybatis-entity`，`mybatis-api`，`mybatis-persist`，`mybatis-service`
 - 默认集成 `swagger3.0` ，如若替换则参考配置文件自定义模版文件
 - 内置模版文件：[模版文件](https://github.com/otk-final/crud-codegen/tree/master/tmpl) 
 - 文档 `header` ，`file`，`path`  配置均支持占位符替换 `{module}`，`{name}`
@@ -237,7 +237,7 @@ package com.demo.user.controller;
 
 import com.demo.ApiResult;
 import com.demo.user.entity.UserPrincipalEntity;
-import com.demo.user.repository.UserPrincipalRepository;
+import com.demo.user.service.UserPrincipalServiceImpl;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -262,62 +262,62 @@ public class UserPrincipalController {
 
 
     @Autowired
-    private UserPrincipalRepository repository;
+    private UserPrincipalServiceImpl serviceImpl;
 
     /**
      * 新增
      */
     @Operation(summary = "新增-用户注册表",operationId = "add")
-    @PostMapping("/v1/user/user_principal/add")
+    @PostMapping("/v1/user_principal/add")
     public ApiResult<Boolean> add(@RequestBody UserPrincipalEntity body) {
-        return new ApiResult<>(repository.save(body));
+        return new ApiResult<>(serviceImpl.save(body));
     }
 
     /**
      * 查询
      */
     @Operation(summary = "查询-用户注册表",operationId = "get")
-    @GetMapping("/v1/user/user_principal/detail/{id}")
+    @GetMapping("/v1/user_principal/detail/{id}")
     public ApiResult<UserPrincipalEntity> get(@PathVariable("id") Long id) {
-        return new ApiResult<>(repository.getById(id));
+        return new ApiResult<>(serviceImpl.getById(id));
     }
 
     /**
      * 修改
      */
     @Operation(summary = "修改-用户注册表",operationId = "update")
-    @PutMapping("/v1/user/user_principal/update/{id}")
+    @PutMapping("/v1/user_principal/update/{id}")
     public ApiResult<Boolean> update(@PathVariable("id") Long id, @RequestBody UserPrincipalEntity body) {
         body.setId(id);
-        return new ApiResult<>(repository.updateById(body));
+        return new ApiResult<>(serviceImpl.updateById(body));
     }
 
     /**
      * 删除
      */
     @Operation(summary = "删除-用户注册表",operationId = "delete")
-    @DeleteMapping("/v1/user/user_principal/delete/{id}")
+    @DeleteMapping("/v1/user_principal/delete/{id}")
     public ApiResult<Boolean> delete(@PathVariable("id") Long id) {
-        return new ApiResult<>(repository.removeById(id));
+        return new ApiResult<>(serviceImpl.removeById(id));
     }
 
     /**
      * 分页
      */
     @Operation(summary = "分页查询-用户注册表",operationId = "page")
-    @GetMapping("/v1/user/user_principal/page")
+    @GetMapping("/v1/user_principal/page")
     public ApiResult<IPage<UserPrincipalEntity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
         IPage<UserPrincipalEntity> pageable = new Page<>(page-1, size);
-        return new ApiResult<>(repository.page(pageable));
+        return new ApiResult<>(serviceImpl.page(pageable));
     }
 
     /**
      * 全量
      */
     @Operation(summary = "全量查询-用户注册表",operationId = "list")
-    @GetMapping("/v1/user/user_principal/list")
+    @GetMapping("/v1/user_principal/list")
     public ApiResult<List<UserPrincipalEntity>> list() {
-        return new ApiResult<>(repository.list());
+        return new ApiResult<>(serviceImpl.list());
     }
 }
 
@@ -522,6 +522,28 @@ public class UserPrincipalEntity  extends BaseEntity  {
 }
 ```
 
+#### Service 业务层 
+
+```java
+package com.demo.user.service;
+
+import com.demo.user.entity.UserPrincipalEntity;
+import com.demo.user.repository.UserPrincipalRepository;
+
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+
+/**
+ * 用户注册表 业务层
+ */
+@Service
+public class UserPrincipalServiceImpl extends ServiceImpl<UserPrincipalRepository, UserPrincipalEntity> implements IService<UserPrincipalEntity>{
+
+}
+```
+
 #### Repository 持久层 
 
 ```java
@@ -530,14 +552,14 @@ package com.demo.user.repository;
 import com.demo.user.entity.UserPrincipalEntity;
 
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
 /**
  * 用户注册表 持久层
  */
-@Component
-public interface UserPrincipalRepository extends IService<UserPrincipalEntity>{
+public interface UserPrincipalRepository extends BaseMapper<UserPrincipalEntity>{
 
 }
 ```
+

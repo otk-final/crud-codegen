@@ -27,6 +27,9 @@ var mybatisEntity string
 //go:embed mybatis/persist.tmpl
 var mybatisPersist string
 
+//go:embed mybatis/service.tmpl
+var mybatisService string
+
 func Capitalize(s string) string {
 	if s == "" {
 		return ""
@@ -66,6 +69,8 @@ func New(name string, style string, variable map[string]string) (*template.Templ
 		return tp.Parse(mybatisEntity)
 	case "mybatis-persist":
 		return tp.Parse(mybatisPersist)
+	case "mybatis-service":
+		return tp.Parse(mybatisService)
 	}
 
 	return nil, errors.New("invalid template name: " + name)
