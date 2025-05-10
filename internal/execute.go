@@ -76,6 +76,8 @@ func Execute(env *Env) error {
 		}
 	}
 
+	fmt.Printf("Generate SUCCESS\n")
+
 	return nil
 }
 
