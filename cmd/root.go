@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	// 根据openapi 生成接口文档
-	rootCmd.AddCommand(initCmd, reloadCmd, startCmd)
+	rootCmd.AddCommand(initCmd, reloadCmd, startCmd, upgradeCmd)
 }
 
 func Run() error {
