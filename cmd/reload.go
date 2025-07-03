@@ -31,7 +31,7 @@ var reloadCmd = &cobra.Command{
 
 		//指定 table
 		if filter != "" {
-			match := lo.Filter(env.Tables, func(item *internal.TableEndpoint, index int) bool {
+			match := lo.Filter(env.Tables, func(item *internal.Endpoint, index int) bool {
 				return lo.Contains([]string{item.Name, item.Endpoint, item.TableName}, filter)
 			})
 			if len(match) == 0 {

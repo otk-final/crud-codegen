@@ -53,7 +53,12 @@ func New(name string, style string, variable map[string]string) (*template.Templ
 	tp.Funcs(tmplFunc)
 
 	if style != "" {
-		return tp.ParseFiles(PwdJoinPath(style))
+		style = PwdJoinPath(style)
+		styleContent, err := os.ReadFile(style)
+		if err != nil {
+			return nil, err
+		}
+		return tp.Parse(string(styleContent))
 	}
 
 	switch name {

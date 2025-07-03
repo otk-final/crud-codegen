@@ -10,6 +10,12 @@ type Inherit struct {
 	Columns []string `json:"columns"` //继承字段
 }
 
+type Render struct {
+	Name      string `json:"name"`      //字段匹配名称
+	Label     string `json:"label"`     //字段标签
+	Component string `json:"component"` //组件模版
+}
+
 type Path struct {
 	Path       string       `json:"path"`
 	Comment    string       `json:"comment"`

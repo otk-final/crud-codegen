@@ -25,6 +25,11 @@ type Column struct {
 	Enums     []Enum            `json:"enums"`      //枚举值
 }
 
+type RenderColumn struct {
+	*Column
+	*Render
+}
+
 type Enum struct {
 	Name  string `json:"name"`  //名称
 	Value string `json:"value"` //值

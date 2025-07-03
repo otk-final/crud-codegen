@@ -14,21 +14,11 @@ import (
 )
 
 type Env struct {
-	Driver     string           `json:"driver,omitempty"`     //驱动
-	Url        string           `json:"url,omitempty"`        //information_schema mysql地址
-	Datasource string           `json:"datasource,omitempty"` //目标数据库
-	Config     Config           `json:"config,omitempty"`     //默认配置
-	Tables     []*TableEndpoint `json:"tables,omitempty"`     //目标数据库表
-}
-
-type TableEndpoint struct {
-	Module      string                   `json:"module,omitempty"`
-	Name        string                   `json:"name,omitempty"`
-	Endpoint    string                   `json:"endpoint,omitempty"`
-	Comment     string                   `json:"comment,omitempty"`
-	TablePrefix string                   `json:"table_prefix,omitempty"` //表名前缀
-	TableName   string                   `json:"table_name,omitempty"`   //表名
-	Outputs     map[string]schema.Output `json:"outputs,omitempty"`      //输出
+	Driver     string      `json:"driver,omitempty"`     //驱动
+	Url        string      `json:"url,omitempty"`        //information_schema mysql地址
+	Datasource string      `json:"datasource,omitempty"` //目标数据库
+	Config     Config      `json:"config,omitempty"`     //默认配置
+	Tables     []*Endpoint `json:"tables,omitempty"`     //目标数据库表
 }
 
 type Config struct {
@@ -40,15 +30,27 @@ type Config struct {
 	Inherit   schema.Inherit           `json:"inherit,omitempty"` //继承
 }
 
+type Endpoint struct {
+	Module      string                   `json:"module,omitempty"`
+	Name        string                   `json:"name,omitempty"`
+	Endpoint    string                   `json:"endpoint,omitempty"`
+	Comment     string                   `json:"comment,omitempty"`
+	TablePrefix string                   `json:"table_prefix,omitempty"` //表名前缀
+	TableName   string                   `json:"table_name,omitempty"`   //表名
+	Outputs     map[string]schema.Output `json:"outputs,omitempty"`      //输出
+	Renders     []*schema.Render         `json:"renders,omitempty"`      //字段渲染
+}
+
 type Mode struct {
 	*schema.Table
-	Module   string
-	Name     string
-	Endpoint string
-	Comment  string
-	Inherit  schema.Inherit //继承类
-	Api      schema.Api     //接口配置
-	Output   schema.Output  //输出
+	Module        string
+	Name          string
+	Endpoint      string
+	Comment       string
+	Inherit       schema.Inherit        //继承类
+	Api           schema.Api            //接口配置
+	Output        schema.Output         //输出
+	RenderColumns []schema.RenderColumn //字段渲染
 }
 
 func Execute(env *Env) error {
@@ -81,7 +83,7 @@ func Execute(env *Env) error {
 	return nil
 }
 
-func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error {
+func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 
 	//忽略前缀
 	tableName := table.Name
@@ -139,6 +141,28 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 		Api:      setting.Api,
 	}
 
+	renderColumns := make([]schema.RenderColumn, 0)
+	for _, item := range endpoint.Renders {
+		//查询字段
+		targetName := item.Name
+		matchColumn, ok := lo.Find(table.Columns, func(column *schema.Column) bool {
+			return column.Name == targetName || column.Alias == targetName
+		})
+		if !ok {
+			continue
+		}
+
+		if item.Label == "" {
+			item.Label = matchColumn.Comment
+		}
+
+		renderColumns = append(renderColumns, schema.RenderColumn{
+			Column: matchColumn,
+			Render: item,
+		})
+	}
+	mode.RenderColumns = renderColumns
+
 	//替换占位符
 	mode.Api.Path = mode.Format(mode.Api.Path)
 
@@ -190,6 +214,7 @@ func export(setting Config, table *schema.Table, endpoint *TableEndpoint) error 
 func (receiver *Mode) Format(text string) string {
 	text = strings.ReplaceAll(text, "{module}", receiver.Module)
 	text = strings.ReplaceAll(text, "{name}", receiver.Name)
+	text = strings.ReplaceAll(text, "{table_name}", receiver.Table.Name)
 	return text
 }
 

@@ -93,7 +93,7 @@ var defaultEnv = &internal.Env{
 	Url:        "username:password@tcp(localhost:3306)/information_schema",
 	Datasource: "demo",
 	Config:     defaultConfig,
-	Tables: []*internal.TableEndpoint{
+	Tables: []*internal.Endpoint{
 		{
 			Module:    "test",
 			TableName: "example",

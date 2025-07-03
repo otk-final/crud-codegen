@@ -22,7 +22,7 @@
                "",
                "import com.demo.ApiResult;",
                "import com.demo.{module}.entity.{name}Entity;",
-               "import com.demo.{module}.repository.{name}Repository;"
+               "import com.demo.{module}.service.{name}ServiceImpl;"
             ],
             "file": "src/main/java/com/demo/{module}/controller/{name}Controller.java"
          },
@@ -41,6 +41,15 @@
                "import com.demo.{module}.entity.{name}Entity;"
             ],
             "file": "src/main/java/com/demo/{module}/repository/{name}Repository.java"
+         },
+         "mybatis-service": {
+            "header": [
+               "package com.demo.{module}.service;",
+               "",
+               "import com.demo.{module}.entity.{name}Entity;",
+               "import com.demo.{module}.repository.{name}Repository;"
+            ],
+            "file": "src/main/java/com/demo/{module}/service/{name}ServiceImpl.java"
          }
       },
       "api": {
@@ -56,7 +65,10 @@
             "updated_at",
             "updated_by",
             "del_flag"
-         ]
+         ],
+         "renders": {
+
+         }
       }
    },
    "tables": [

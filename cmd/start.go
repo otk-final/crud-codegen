@@ -21,8 +21,8 @@ var startCmd = &cobra.Command{
 			return errors.New("required table names")
 		}
 
-		defaultEnv.Tables = lo.Map(tables, func(item string, index int) *internal.TableEndpoint {
-			return &internal.TableEndpoint{
+		defaultEnv.Tables = lo.Map(tables, func(item string, index int) *internal.Endpoint {
+			return &internal.Endpoint{
 				Module:    "demo",
 				TableName: item,
 			}
