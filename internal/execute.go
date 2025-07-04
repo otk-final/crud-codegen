@@ -114,6 +114,16 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 		//类型转换
 		langType, ok := types[column.Type]
 		column.TypeAlias = lo.Ternary(ok, langType, column.Type)
+
+		//指定字段重命名
+		fieldAlias, ok := types["~"+column.Alias]
+		if ok {
+			column.TypeAlias = fieldAlias
+		}
+		fieldName, ok := types["~"+column.Name]
+		if ok {
+			column.TypeAlias = fieldName
+		}
 	}
 
 	//过滤 继承属性
@@ -142,26 +152,40 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 	}
 
 	renderColumns := make([]schema.RenderColumn, 0)
-	for _, item := range endpoint.Renders {
-		//查询字段
-		targetName := item.Name
-		matchColumn, ok := lo.Find(table.Columns, func(column *schema.Column) bool {
-			return column.Name == targetName || column.Alias == targetName
-		})
-		if !ok {
-			continue
-		}
+	if len(endpoint.Renders) > 0 {
+		for _, item := range endpoint.Renders {
+			//查询字段
+			targetName := item.Name
+			matchColumn, ok := lo.Find(table.Columns, func(column *schema.Column) bool {
+				return column.Name == targetName || column.Alias == targetName
+			})
+			if !ok {
+				continue
+			}
 
-		if item.Label == "" {
-			item.Label = matchColumn.Comment
-		}
+			if item.Label == "" {
+				item.Label = matchColumn.Comment
+			}
 
-		renderColumns = append(renderColumns, schema.RenderColumn{
-			Column: matchColumn,
-			Render: item,
+			renderColumns = append(renderColumns, schema.RenderColumn{
+				Column: matchColumn,
+				Render: item,
+			})
+		}
+		mode.RenderColumns = renderColumns
+	} else {
+		//默认text
+		mode.RenderColumns = lo.Map(table.Columns, func(item *schema.Column, index int) schema.RenderColumn {
+			return schema.RenderColumn{
+				Column: item,
+				Render: &schema.Render{
+					Name:      item.Name,
+					Label:     item.Comment,
+					Component: "div",
+				},
+			}
 		})
 	}
-	mode.RenderColumns = renderColumns
 
 	//替换占位符
 	mode.Api.Path = mode.Format(mode.Api.Path)
