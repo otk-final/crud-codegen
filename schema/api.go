@@ -34,4 +34,5 @@ type Output struct {
 	File      string            `json:"file,omitempty"`      //文件地址
 	Template  string            `json:"template,omitempty"`  //模版文件
 	Variables map[string]string `json:"variables,omitempty"` //变量集
+	Rewrite   bool              `json:"rewrite,omitempty"`   //重新生成文件
 }

@@ -211,6 +211,13 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 		//格式化文件路径
 		file := mode.Format(output.File)
 
+		//查看文件是否存在
+		if _, err := os.Stat(file); err != nil && os.IsExist(err) && !output.Rewrite {
+			//是否允许覆盖
+			//fmt.Printf("Output Rewrite Reject：%s \n", file)
+			continue
+		}
+
 		//调用模版
 		buf := &bytes.Buffer{}
 		err = tp.Execute(buf, mode)
