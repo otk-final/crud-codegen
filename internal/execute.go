@@ -28,6 +28,7 @@ type Config struct {
 	Outputs   map[string]schema.Output `json:"outputs,omitempty"` //输入路径
 	Api       schema.Api               `json:"api,omitempty"`     //接口配置
 	Inherit   schema.Inherit           `json:"inherit,omitempty"` //继承
+	Rewrite   bool                     `json:"rewrite,omitempty"` //是否强制重新生成文件
 }
 
 type Endpoint struct {
@@ -197,6 +198,17 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 			continue
 		}
 
+		//格式化文件路径
+		file := mode.Format(output.File)
+		//文件存在默认不覆盖
+		_, err := os.Stat(file)
+		//用户强制覆盖
+		rewrite := os.IsNotExist(err) || output.Rewrite || setting.Rewrite
+		if !rewrite {
+			continue
+		}
+
+		//根据模版生成文件
 		tp, err := tmpl.New(name, output.Template, output.Variables)
 		if err != nil {
 			return err
@@ -207,16 +219,6 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 			return mode.Format(item)
 		})
 		mode.Output = output
-
-		//格式化文件路径
-		file := mode.Format(output.File)
-
-		//查看文件是否存在
-		if _, err := os.Stat(file); err != nil && os.IsExist(err) && !output.Rewrite {
-			//是否允许覆盖
-			//fmt.Printf("Output Rewrite Reject：%s \n", file)
-			continue
-		}
 
 		//调用模版
 		buf := &bytes.Buffer{}

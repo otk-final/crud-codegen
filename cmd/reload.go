@@ -15,7 +15,6 @@ var reloadCmd = &cobra.Command{
 	Use:   "reload",
 	Short: "Generate code based on the configuration file",
 	RunE: func(cmd *cobra.Command, args []string) error {
-
 		//读取配置文件
 		if envFile == "" {
 			envFile = tmpl.PwdJoinPath(defaultEnvFileName)
@@ -69,11 +68,9 @@ var reloadCmd = &cobra.Command{
 			}
 		}
 
-		//全局替换
 		if rewrite {
-			for _, output := range env.Config.Outputs {
-				output.Rewrite = rewrite
-			}
+			//强制覆盖
+			env.Config.Rewrite = rewrite
 		}
 
 		//执行

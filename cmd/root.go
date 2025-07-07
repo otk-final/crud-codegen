@@ -2,14 +2,14 @@ package cmd
 
 import "github.com/spf13/cobra"
 
-const version = "1.0.2"
+const version = "1.0.3"
 
 var rootCmd = &cobra.Command{
 	Use:     "crud",
 	Version: version,
-	Short:   "Crud code generation tool",
+	Short:   "CRUD code generation tool",
 	Long:    "This is a tool that quickly generates CRUD interfaces based on database table structures.",
-	Example: "crud init|gen",
+	Example: "crud init",
 }
 
 func init() {
