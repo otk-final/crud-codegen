@@ -1,6 +1,6 @@
 {
    "driver": "mysql",
-   "url": "username:password@tcp(localhost:3306)/information_schema",
+   "url": "root:username#password@tcp(localhost:3306)/information_schema",
    "datasource": "demo",
    "config": {
       "camel_case": true,
@@ -22,7 +22,7 @@
                "",
                "import com.demo.ApiResult;",
                "import com.demo.{module}.entity.{name}Entity;",
-               "import com.demo.{module}.service.{name}ServiceImpl;"
+               "import com.demo.{module}.service.I{name}Service;"
             ],
             "file": "src/main/java/com/demo/{module}/controller/{name}Controller.java"
          },
@@ -49,7 +49,17 @@
                "import com.demo.{module}.entity.{name}Entity;",
                "import com.demo.{module}.repository.{name}Repository;"
             ],
-            "file": "src/main/java/com/demo/{module}/service/{name}ServiceImpl.java"
+            "file": "src/main/java/com/demo/{module}/service/I{name}Service.java"
+         },
+         "mybatis-service-impl": {
+            "header": [
+               "package com.demo.{module}.service.impl;",
+               "",
+               "import com.demo.{module}.service.I{name}Service;",
+               "import com.demo.{module}.entity.{name}Entity;",
+               "import com.demo.{module}.repository.{name}Repository;"
+            ],
+            "file": "src/main/java/com/demo/{module}/service/impl/{name}ServiceImpl.java"
          }
       },
       "api": {
@@ -65,17 +75,14 @@
             "updated_at",
             "updated_by",
             "del_flag"
-         ],
-         "renders": {
-
-         }
+         ]
       }
    },
    "tables": [
       {
          "module": "test",
-         "comment": "测试",
-         "table_name": "example"
+         "comment": "系统字典",
+         "table_name": "sys_dict"
       }
    ]
 }

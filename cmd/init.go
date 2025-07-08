@@ -15,7 +15,7 @@ var api = schema.Output{
 		"",
 		"import com.demo.ApiResult;",
 		"import com.demo.{module}.entity.{name}Entity;",
-		"import com.demo.{module}.service.{name}ServiceImpl;",
+		"import com.demo.{module}.service.I{name}Service;",
 	},
 	File: "src/main/java/com/demo/{module}/controller/{name}Controller.java",
 }
@@ -44,8 +44,20 @@ var service = schema.Output{
 		"import com.demo.{module}.entity.{name}Entity;",
 		"import com.demo.{module}.repository.{name}Repository;",
 	},
+	File: "src/main/java/com/demo/{module}/service/I{name}Service.java",
+}
+
+var serviceImpl = schema.Output{
+	Header: []string{
+		"package com.demo.{module}.service.impl;",
+		"",
+		"import com.demo.{module}.service.I{name}Service;",
+		"import com.demo.{module}.entity.{name}Entity;",
+		"import com.demo.{module}.repository.{name}Repository;",
+	},
 	File: "src/main/java/com/demo/{module}/service/{name}ServiceImpl.java",
 }
+
 var defaultConfig = internal.Config{
 	CamelCase: true,
 	Alias:     map[string]string{},
@@ -62,10 +74,11 @@ var defaultConfig = internal.Config{
 	},
 	Outputs: map[string]schema.Output{
 
-		"mybatis-api":     api,
-		"mybatis-entity":  entity,
-		"mybatis-persist": persist,
-		"mybatis-service": service,
+		"mybatis-api":          api,
+		"mybatis-entity":       entity,
+		"mybatis-persist":      persist,
+		"mybatis-service":      service,
+		"mybatis-service-impl": serviceImpl,
 
 		//"jdbc-api":     api,
 		//"jdbc-entity":  entity,

@@ -116,12 +116,12 @@ func export(setting Config, table *schema.Table, endpoint *Endpoint) error {
 		langType, ok := types[column.Type]
 		column.TypeAlias = lo.Ternary(ok, langType, column.Type)
 
-		//指定字段重命名
-		fieldAlias, ok := types["~"+column.Alias]
-		if ok {
-			column.TypeAlias = fieldAlias
-		}
+		//字段类型重命名
 		fieldName, ok := types["~"+column.Name]
+		if ok {
+			column.TypeAlias = fieldName
+		}
+		fieldName, ok = types[table.Name+":"+column.Name]
 		if ok {
 			column.TypeAlias = fieldName
 		}

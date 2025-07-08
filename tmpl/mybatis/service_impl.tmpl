@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * {{.Comment}} 服务层
+ * {{.Comment}} 业务层
  */
-public class I{{.Name}}Service extends IService<{{.Name}}Entity>{
+@Service
+public class {{.Name}}ServiceImpl extends ServiceImpl<{{.Name}}Repository, {{.Name}}Entity> implements I{{.Name}}Service{
 
 }
