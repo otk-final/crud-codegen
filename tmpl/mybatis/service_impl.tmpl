@@ -2,7 +2,6 @@
 {{- $val}}
 {{end}}
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,6 @@ import org.springframework.stereotype.Service;
  * {{.Comment}} 业务层
  */
 @Service
-public class {{.Name}}ServiceImpl extends ServiceImpl<{{.Name}}Repository, {{.Name}}Entity> implements I{{.Name}}Service{
+public class {{.Name}}ServiceImpl extends ServiceImpl<{{.Name}}Repository, {{.Name}}Entity> implements {{.Name}}Service{
 
 }

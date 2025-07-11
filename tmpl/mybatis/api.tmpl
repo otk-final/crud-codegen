@@ -24,7 +24,7 @@ public class {{.Name}}Controller {
 
 
     @Autowired
-    private I{{.Name}}Service serviceImpl;
+    private {{.Name}}Service serviceImpl;
 
     /**
      * 新增
@@ -69,7 +69,7 @@ public class {{.Name}}Controller {
     @Operation(summary = "分页查询-{{.Comment}}",operationId = "page")
     @GetMapping("{{.Api.Path}}/{{.Endpoint}}/page")
     public {{.Api.Class}}<IPage<{{.Name}}Entity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
-        IPage<{{.Name}}Entity> pageable = new Page<>(page-1, size);
+        IPage<{{.Name}}Entity> pageable = new Page<>(page, size);
         return new {{.Api.Class}}<>(serviceImpl.page(pageable));
     }
 
