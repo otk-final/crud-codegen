@@ -68,8 +68,8 @@ public class {{.Name}}Controller {
      */
     @Operation(summary = "分页查询-{{.Comment}}",operationId = "page")
     @GetMapping("{{.Api.Path}}/{{.Endpoint}}/page")
-    public {{.Api.Class}}<IPage<{{.Name}}Entity>> page(@RequestParam("page") Integer page,@RequestParam("size") Integer size) {
-        IPage<{{.Name}}Entity> pageable = new Page<>(page, size);
+    public {{.Api.Class}}<IPage<{{.Name}}Entity>> page(@RequestParam("current") Integer currentPage,@RequestParam("pageSize") Integer pageSize) {
+        IPage<{{.Name}}Entity> pageable = new Page<>(currentPage, pageSize);
         return new {{.Api.Class}}<>(serviceImpl.page(pageable));
     }
 
